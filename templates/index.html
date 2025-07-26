@@ -1,80 +1,249 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Leaf Disease Prediction</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Plant Disease Detection | Bottle Gourd Health Monitor</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>🌿 Bottle Gourd Disease Detection System</h1>
-        <p class="subtitle">Upload a leaf or fruit image to detect plant diseases using AI ensemble models</p>
-        
-        <div class="disease-info" style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 30px; font-size: 0.9em; color: #7f8c8d;">
-            <h4 style="color: #2c3e50; margin-bottom: 10px;">🔬 Detectable Diseases:</h4>
-            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Anthracnose fruit rot</span>
-                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Anthracnose leaf spot</span>
-                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Blossom end rot</span>
-                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Fresh fruit</span>
-                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Fresh leaf</span>
-                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Insect damaged leaf</span>
-                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Yellow mosaic virus</span>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>PlantCare AI</h1>
+                        <p>Advanced Bottle Gourd Disease Detection</p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">AI Models</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">7</span>
+                        <span class="stat-label">Disease Types</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">99%</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                </div>
             </div>
-        </div>
-        
-        <div class="upload-section">
-            <form id="uploadForm">
-                <div class="file-input-wrapper">
-                    <input type="file" id="imageInput" name="image" accept="image/*" required>
-                    <label for="imageInput" class="file-input-label">
-                        📁 Choose Image
-                    </label>
+        </header>
+
+        <!-- Main Container -->
+        <div class="main-container">
+            <!-- Disease Info Cards -->
+            <div class="disease-info-grid">
+                <h3><i class="fas fa-microscope"></i> Detectable Conditions</h3>
+                <div class="disease-cards">
+                    <div class="disease-card disease">
+                        <i class="fas fa-virus"></i>
+                        <span>Anthracnose fruit rot</span>
+                    </div>
+                    <div class="disease-card disease">
+                        <i class="fas fa-bug"></i>
+                        <span>Anthracnose leaf spot</span>
+                    </div>
+                    <div class="disease-card disease">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Blossom end rot</span>
+                    </div>
+                    <div class="disease-card healthy">
+                        <i class="fas fa-apple-alt"></i>
+                        <span>Fresh fruit</span>
+                    </div>
+                    <div class="disease-card healthy">
+                        <i class="fas fa-leaf"></i>
+                        <span>Fresh leaf</span>
+                    </div>
+                    <div class="disease-card disease">
+                        <i class="fas fa-cut"></i>
+                        <span>Insect damaged leaf</span>
+                    </div>
+                    <div class="disease-card disease">
+                        <i class="fas fa-biohazard"></i>
+                        <span>Yellow mosaic virus</span>
+                    </div>
                 </div>
-                <button type="submit" id="predictBtn" class="predict-btn" disabled>
-                    🔍 Predict Disease
-                </button>
-            </form>
-        </div>
+            </div>
 
-        <div id="imagePreview" class="image-preview" style="display: none;">
-            <h3>Selected Image:</h3>
-            <img id="previewImg" alt="Preview" />
-        </div>
-
-        <div id="loadingDiv" class="loading" style="display: none;">
-            <div class="spinner"></div>
-            <p>Analyzing the leaf image...</p>
-        </div>
-
-        <div id="result" class="result-section" style="display: none;">
-            <h3>Analysis Result:</h3>
-            <div class="result-content">
-                <div class="result-image">
-                    <img id="resultImg" alt="Analyzed Image" />
-                </div>
-                <div class="result-text">
-                    <div class="prediction-box">
-                        <h4>🔬 Detected Disease:</h4>
-                        <p id="predictionText"></p>
-                        
-                        <div id="allPredictions" style="margin-top: 15px; display: none;">
-                            <h5 style="color: #2c3e50; margin-bottom: 10px;">📊 All Class Probabilities:</h5>
-                            <div id="probabilitiesList"></div>
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <div class="upload-container">
+                    <form id="uploadForm" class="upload-form">
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" id="imageInput" name="image" accept="image/*" required>
+                            <div class="upload-content">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <h4>Upload Plant Image</h4>
+                                <p>Drag and drop your image here or click to browse</p>
+                                <div class="upload-formats">
+                                    <span>Supports: JPG, PNG, WebP</span>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div id="modelInfo" style="margin-top: 15px; display: none;">
-                            <h5 style="color: #7f8c8d; margin-bottom: 5px;">🤖 Model Architecture:</h5>
-                            <p id="architectureText" style="font-size: 0.9em; color: #7f8c8d;"></p>
+                        <button type="submit" id="predictBtn" class="predict-btn" disabled>
+                            <i class="fas fa-search"></i>
+                            <span>Analyze Image</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Image Preview -->
+            <div id="imagePreview" class="image-preview-section" style="display: none;">
+                <div class="preview-container">
+                    <h3><i class="fas fa-image"></i> Selected Image</h3>
+                    <div class="preview-wrapper">
+                        <img id="previewImg" alt="Preview" />
+                        <div class="preview-overlay">
+                            <button class="change-image-btn" onclick="document.getElementById('imageInput').click()">
+                                <i class="fas fa-edit"></i> Change Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Animation -->
+            <div id="loadingDiv" class="loading-section" style="display: none;">
+                <div class="loading-container">
+                    <div class="loading-animation">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <h3>Analyzing Your Plant</h3>
+                    <p>Our AI models are examining the image...</p>
+                    <div class="analysis-steps">
+                        <div class="step active" id="step1">
+                            <i class="fas fa-upload"></i>
+                            <span>Image Processing</span>
+                        </div>
+                        <div class="step" id="step2">
+                            <i class="fas fa-brain"></i>
+                            <span>AI Analysis</span>
+                        </div>
+                        <div class="step" id="step3">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Results Generation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="result" class="results-section" style="display: none;">
+                <div class="results-container">
+                    <h2><i class="fas fa-flask"></i> Analysis Results</h2>
+                    
+                    <div class="results-grid">
+                        <!-- Image Result -->
+                        <div class="result-image-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-image"></i> Analyzed Image</h3>
+                            </div>
+                            <div class="image-container">
+                                <img id="resultImg" alt="Analyzed Image" />
+                            </div>
+                        </div>
+
+                        <!-- Main Prediction -->
+                        <div class="prediction-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-diagnoses"></i> Primary Diagnosis</h3>
+                            </div>
+                            <div class="prediction-content">
+                                <div id="predictionText" class="prediction-result"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Analysis -->
+                    <div class="analysis-tabs">
+                        <div class="tab-buttons">
+                            <button class="tab-btn active" data-tab="probabilities">
+                                <i class="fas fa-chart-bar"></i> Probabilities
+                            </button>
+                            <button class="tab-btn" data-tab="models">
+                                <i class="fas fa-cogs"></i> Model Info
+                            </button>
+                            <button class="tab-btn" data-tab="treatment">
+                                <i class="fas fa-prescription-bottle-alt"></i> Treatment
+                            </button>
+                        </div>
+
+                        <div class="tab-content">
+                            <!-- Probabilities Tab -->
+                            <div id="probabilities-tab" class="tab-pane active">
+                                <div id="allPredictions" style="display: none;">
+                                    <h4>All Class Probabilities</h4>
+                                    <div id="probabilitiesList" class="probabilities-list"></div>
+                                </div>
+                            </div>
+
+                            <!-- Model Info Tab -->
+                            <div id="models-tab" class="tab-pane">
+                                <div id="modelInfo" style="display: none;">
+                                    <h4>AI Model Architecture</h4>
+                                    <div id="architectureText" class="architecture-info"></div>
+                                </div>
+                            </div>
+
+                            <!-- Treatment Tab -->
+                            <div id="treatment-tab" class="tab-pane">
+                                <div id="diseaseInfo" style="display: none;">
+                                    <h4>Disease Information & Treatment</h4>
+                                    <div id="diseaseDetails" class="disease-details"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PlantCare AI</h4>
+                    <p>Advanced agricultural technology for disease detection and plant health monitoring.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Technology</h4>
+                    <ul>
+                        <li>Deep Learning Ensemble</li>
+                        <li>Computer Vision</li>
+                        <li>PyTorch Framework</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Accuracy</h4>
+                    <p>6 CNN models working together for maximum precision in plant disease detection.</p>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <script>
         const form = document.getElementById('uploadForm');
         const imageInput = document.getElementById('imageInput');
+        const uploadArea = document.getElementById('uploadArea');
         const previewDiv = document.getElementById('imagePreview');
         const previewImg = document.getElementById('previewImg');
         const resultDiv = document.getElementById('result');
@@ -83,25 +252,89 @@
         const predictBtn = document.getElementById('predictBtn');
         const loadingDiv = document.getElementById('loadingDiv');
 
+        // Drag and drop functionality
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                imageInput.files = files;
+                handleImageSelection(files[0]);
+            }
+        });
+
         // Handle image selection and preview
         imageInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    previewDiv.style.display = 'block';
-                    predictBtn.disabled = false;
-                    // Hide previous results
-                    resultDiv.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
+                handleImageSelection(file);
             } else {
                 previewDiv.style.display = 'none';
                 predictBtn.disabled = true;
                 resultDiv.style.display = 'none';
             }
         });
+
+        function handleImageSelection(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewDiv.style.display = 'block';
+                previewDiv.classList.add('fade-in');
+                predictBtn.disabled = false;
+                // Hide previous results
+                resultDiv.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Tab functionality
+        function initTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetTab = button.getAttribute('data-tab');
+                    
+                    // Remove active class from all buttons and panes
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanes.forEach(pane => pane.classList.remove('active'));
+                    
+                    // Add active class to clicked button and corresponding pane
+                    button.classList.add('active');
+                    document.getElementById(targetTab + '-tab').classList.add('active');
+                });
+            });
+        }
+
+        // Loading animation steps
+        function animateLoadingSteps() {
+            const steps = ['step1', 'step2', 'step3'];
+            let currentStep = 0;
+            
+            const interval = setInterval(() => {
+                // Remove active from current step
+                document.getElementById(steps[currentStep]).classList.remove('active');
+                
+                // Move to next step
+                currentStep = (currentStep + 1) % steps.length;
+                
+                // Add active to new step
+                document.getElementById(steps[currentStep]).classList.add('active');
+            }, 1000);
+            
+            return interval;
+        }
 
         // Handle form submission
         form.onsubmit = async (e) => {
@@ -110,10 +343,13 @@
             const image = imageInput.files[0];
             if (!image) return;
 
-            // Show loading
+            // Show loading with animation
             loadingDiv.style.display = 'block';
+            loadingDiv.classList.add('fade-in');
             resultDiv.style.display = 'none';
             predictBtn.disabled = true;
+            
+            const loadingInterval = animateLoadingSteps();
 
             const formData = new FormData();
             formData.append('image', image);
@@ -126,57 +362,38 @@
 
                 const result = await response.json();
                 
+                // Clear loading interval
+                clearInterval(loadingInterval);
+                
                 // Hide loading
                 loadingDiv.style.display = 'none';
                 
                 if (result.prediction) {
-                    // Show the same image in results with debugging
-                    console.log('Setting result image source:', previewImg.src);
-                    console.log('Preview image element:', previewImg);
-                    console.log('Result image element:', resultImg);
+                    // Show result image
+                    resultImg.src = previewImg.src;
                     
-                    // Clear any previous source and set new one
-                    resultImg.src = '';
-                    setTimeout(() => {
-                        resultImg.src = previewImg.src;
-                        console.log('Result image src set to:', resultImg.src);
-                    }, 100);
-                    
-                    // Make sure the image is visible and loaded
-                    resultImg.style.display = 'block';
-                    resultImg.style.visibility = 'visible';
-                    resultImg.style.opacity = '1';
-                    
-                    resultImg.onload = function() {
-                        console.log('Result image loaded successfully');
-                        console.log('Image dimensions:', this.naturalWidth, 'x', this.naturalHeight);
-                    };
-                    resultImg.onerror = function() {
-                        console.error('Failed to load result image');
-                        console.error('Image src:', this.src);
-                    };
-                    
-                    // Display main prediction
+                    // Display main prediction with modern styling
                     let predictionHtml = `<strong>${result.prediction}</strong>`;
                     if (result.confidence) {
-                        predictionHtml += `<br><small style="color: #7f8c8d;">Confidence: ${result.confidence}</small>`;
+                        predictionHtml += `<br><small style="color: var(--gray-600);">Confidence: ${result.confidence}</small>`;
                     }
                     
                     predictionText.innerHTML = predictionHtml;
                     predictionText.className = 'prediction-success';
                     
-                    // Show all class probabilities if available
+                    // Show all class probabilities
                     const allPredictionsDiv = document.getElementById('allPredictions');
                     const probabilitiesList = document.getElementById('probabilitiesList');
                     
                     if (result.all_predictions) {
+                        probabilitiesList.className = 'probabilities-list';
                         let probabilitiesHtml = '';
                         for (const [className, probability] of Object.entries(result.all_predictions)) {
                             const isHighest = className === result.prediction;
                             probabilitiesHtml += `
-                                <div style="padding: 5px; margin: 2px 0; border-radius: 5px; ${isHighest ? 'background-color: #d5f4e6; font-weight: bold;' : 'background-color: #f8f9fa;'}">
-                                    <span style="color: #2c3e50;">${className}:</span> 
-                                    <span style="color: #27ae60; float: right;">${probability}</span>
+                                <div class="probability-item ${isHighest ? 'highest' : ''}">
+                                    <span class="probability-label">${className}</span>
+                                    <span class="probability-value">${probability}</span>
                                 </div>
                             `;
                         }
@@ -184,49 +401,180 @@
                         allPredictionsDiv.style.display = 'block';
                     }
                     
-                    // Show model info if available
+                    // Show model info
                     const modelInfoDiv = document.getElementById('modelInfo');
                     const architectureText = document.getElementById('architectureText');
                     
                     if (result.model_info) {
-                        // Format base models as individual badges
+                        architectureText.className = 'architecture-info';
                         let baseModelsHtml = '';
                         if (result.model_info.base_models && Array.isArray(result.model_info.base_models)) {
                             baseModelsHtml = result.model_info.base_models.map(model => 
-                                `<span style="background: #e3f2fd; color: #1976d2; padding: 3px 8px; border-radius: 12px; font-size: 0.8em; margin: 2px; display: inline-block;">${model}</span>`
+                                `<span class="model-badge">${model}</span>`
                             ).join('');
                         } else {
-                            baseModelsHtml = `<span style="background: #e3f2fd; color: #1976d2; padding: 3px 8px; border-radius: 12px; font-size: 0.8em;">${result.model_info.base_models}</span>`;
+                            baseModelsHtml = `<span class="model-badge">${result.model_info.base_models}</span>`;
                         }
                         
                         architectureText.innerHTML = `
-                            <strong>${result.model_info.architecture}</strong><br>
-                            <div style="margin-top: 8px;">
-                                <small style="color: #666;">Base Models (${result.model_info.total_models}):</small><br>
-                                <div style="margin-top: 5px;">${baseModelsHtml}</div>
+                            <div style="margin-bottom: var(--space-4);">
+                                <strong style="color: var(--gray-900); font-size: 16px;">${result.model_info.architecture}</strong>
                             </div>
-                            <div style="margin-top: 8px;">
-                                <small style="color: #666;">Classes: ${result.model_info.classes} | Device: ${result.model_info.device}</small>
+                            <div style="margin-bottom: var(--space-3);">
+                                <strong style="color: var(--gray-700);">Base Models (${result.model_info.total_models}):</strong>
+                                <div style="margin-top: var(--space-2);">${baseModelsHtml}</div>
+                            </div>
+                            <div style="font-size: 14px; color: var(--gray-600);">
+                                <strong>Classes:</strong> ${result.model_info.classes} | 
+                                <strong>Device:</strong> ${result.model_info.device}
                             </div>
                         `;
                         modelInfoDiv.style.display = 'block';
                     }
                     
+                    // Show disease information
+                    const diseaseInfoDiv = document.getElementById('diseaseInfo');
+                    const diseaseDetails = document.getElementById('diseaseDetails');
+                    
+                    const diseaseInformation = {
+                        "Anthracnose fruit rot": {
+                            emoji: "🥒",
+                            cause: "Colletotrichum lagenarium",
+                            symptoms: "Sunken, dark brown to black spots on fruits, which enlarge and rot the tissue.",
+                            treatment: `• Remove and destroy infected fruits immediately.
+• Spray Carbendazim 0.1% or Thiophanate-methyl 0.1% at 7-day intervals.
+• Avoid fruit injury during harvest or handling.
+• Ensure proper spacing for air circulation to reduce humidity.
+• Improve drainage to avoid standing water.`
+                        },
+                        "Anthracnose leaf spot": {
+                            emoji: "🍂",
+                            cause: "Colletotrichum lagenarium",
+                            symptoms: "Irregular dark brown spots on leaves, sometimes with concentric rings.",
+                            treatment: `• Cut off and burn affected leaves.
+• Apply Chlorothalonil (0.2%) or Mancozeb (0.25%) as protective fungicides.
+• Alternate with Carbendazim (0.1%) for systemic action.
+• Spray at 7-day intervals and avoid overhead irrigation.
+• Clean up fallen infected leaves from the ground.`
+                        },
+                        "Blossom end rot": {
+                            emoji: "🌑",
+                            cause: "Calcium deficiency combined with inconsistent watering (physiological disorder)",
+                            symptoms: "Black, sunken lesions at the blossom end of fruit; fruit becomes soft and rot-prone.",
+                            treatment: `• Remove affected fruits to prevent nutrient drain.
+• Spray Calcium nitrate (0.2%) or Calcium chloride (0.3%) weekly on leaves and developing fruits.
+• Maintain even and consistent watering, avoiding wet-dry cycles.
+• Use mulch to retain soil moisture and prevent temperature fluctuation.
+• Adjust soil pH if it's below 6.0 (add lime or gypsum).`
+                        },
+                        "Insect damaged leaf": {
+                            emoji: "🐛",
+                            cause: "Chewing insects like beetles, caterpillars, or grasshoppers",
+                            symptoms: "Holes, chewed edges, or missing sections of leaves.",
+                            treatment: `• Spray Spinosad (0.5 ml/L), Lambda-cyhalothrin (0.5 ml/L), or Neem oil (5 ml/L).
+• For caterpillars, use Bacillus thuringiensis (Bt) as a biological control.
+• Reapply every 5–7 days as needed.
+• Remove heavily infested leaves to reduce pest spread.
+• Use yellow/blue sticky traps and encourage beneficial insects like ladybugs.`
+                        },
+                        "Yellow mosaic virus": {
+                            emoji: "🦠",
+                            cause: "Viral infection (CMV or Begomoviruses), spread by whiteflies",
+                            symptoms: "Yellow mosaic patches, leaf distortion, stunted growth.",
+                            treatment: `• No cure — remove and destroy infected plants immediately.
+• Spray Imidacloprid (0.05%) or Thiamethoxam (0.03%) to kill whiteflies.
+• Use Neem oil (3%) as a natural alternative.
+• Set up yellow sticky traps to monitor and control whitefly populations.
+• Avoid planting new bottle gourd near previous infection zones.
+• Plant virus-resistant cultivars if available.`
+                        },
+                        "Fresh fruit": {
+                            emoji: "✅",
+                            cause: "No disease detected",
+                            symptoms: "Healthy fruit with normal appearance and coloration.",
+                            treatment: `• Continue regular care and monitoring.
+• Maintain proper irrigation and fertilization schedule.
+• Monitor for any early signs of disease development.
+• Ensure good air circulation and plant spacing.
+• Practice preventive measures to maintain plant health.`
+                        },
+                        "Fresh leaf": {
+                            emoji: "🌱",
+                            cause: "No disease detected",
+                            symptoms: "Healthy leaf with normal green coloration and structure.",
+                            treatment: `• Continue regular care and monitoring.
+• Maintain balanced nutrition and proper watering.
+• Monitor plants regularly for any disease symptoms.
+• Practice good garden hygiene and sanitation.
+• Ensure adequate sunlight and air circulation.`
+                        }
+                    };
+                    
+                    if (diseaseInformation[result.prediction]) {
+                        const info = diseaseInformation[result.prediction];
+                        const isHealthy = result.prediction === "Fresh fruit" || result.prediction === "Fresh leaf";
+                        
+                        diseaseDetails.className = 'disease-details';
+                        diseaseDetails.innerHTML = `
+                            <h6>${info.emoji} ${result.prediction}</h6>
+                            <div style="margin-bottom: var(--space-4);">
+                                <p style="margin-bottom: var(--space-2);"><strong style="color: var(--gray-700);">Cause:</strong> <span style="color: var(--gray-800);">${info.cause}</span></p>
+                                <p style="margin-bottom: var(--space-4);"><strong style="color: var(--gray-700);">Symptoms:</strong> <span style="color: var(--gray-800);">${info.symptoms}</span></p>
+                                <div>
+                                    <strong style="color: var(--gray-700); display: block; margin-bottom: var(--space-3);">${isHealthy ? 'Maintenance Recommendations:' : 'Post-Infection Treatment:'}</strong>
+                                    <div class="treatment-list">
+                                        ${info.treatment.split('\n').map(line => 
+                                            line.trim() ? `<div class="treatment-item">${line}</div>` : ''
+                                        ).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            ${!isHealthy ? `
+                            <div class="alert-warning">
+                                <p style="margin: 0;">
+                                    <strong>⚠️ Important:</strong> Always consult with local agricultural experts or extension services for specific recommendations based on your local conditions and regulations regarding pesticide use.
+                                </p>
+                            </div>
+                            ` : `
+                            <div class="alert-success">
+                                <p style="margin: 0;">
+                                    <strong>✅ Great!</strong> Your plant appears healthy. Continue with regular monitoring and preventive care to maintain plant health.
+                                </p>
+                            </div>
+                            `}
+                        `;
+                        diseaseInfoDiv.style.display = 'block';
+                    }
+                    
+                    // Initialize tabs
+                    initTabs();
+                    
+                    // Show results with animation
                     resultDiv.style.display = 'block';
+                    resultDiv.classList.add('fade-in');
+                    
                 } else {
                     predictionText.innerHTML = "Error: " + (result.error || "Unknown error occurred");
                     predictionText.className = 'prediction-error';
                     resultDiv.style.display = 'block';
+                    resultDiv.classList.add('fade-in');
                 }
             } catch (error) {
+                clearInterval(loadingInterval);
                 loadingDiv.style.display = 'none';
                 predictionText.innerHTML = "Error: Failed to connect to server";
                 predictionText.className = 'prediction-error';
                 resultDiv.style.display = 'block';
+                resultDiv.classList.add('fade-in');
             }
             
             predictBtn.disabled = false;
         };
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', () => {
+            initTabs();
+        });
     </script>
 </body>
 </html>
