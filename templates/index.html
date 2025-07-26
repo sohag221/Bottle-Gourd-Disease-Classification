@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaf Disease Prediction</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🌿 Leaf Disease Detection System</h1>
+        <p class="subtitle">Upload a leaf image to detect plant diseases using AI</p>
+        
+        <div class="upload-section">
+            <form id="uploadForm">
+                <div class="file-input-wrapper">
+                    <input type="file" id="imageInput" name="image" accept="image/*" required>
+                    <label for="imageInput" class="file-input-label">
+                        📁 Choose Leaf Image
+                    </label>
+                </div>
+                <button type="submit" id="predictBtn" class="predict-btn" disabled>
+                    🔍 Predict Disease
+                </button>
+            </form>
+        </div>
+
+        <div id="imagePreview" class="image-preview" style="display: none;">
+            <h3>Selected Image:</h3>
+            <img id="previewImg" alt="Preview" />
+        </div>
+
+        <div id="loadingDiv" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Analyzing the leaf image...</p>
+        </div>
+
+        <div id="result" class="result-section" style="display: none;">
+            <h3>Analysis Result:</h3>
+            <div class="result-content">
+                <div class="result-image">
+                    <img id="resultImg" alt="Analyzed Image" />
+                </div>
+                <div class="result-text">
+                    <div class="prediction-box">
+                        <h4>Detected Disease:</h4>
+                        <p id="predictionText"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('uploadForm');
+        const imageInput = document.getElementById('imageInput');
+        const previewDiv = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const resultDiv = document.getElementById('result');
+        const resultImg = document.getElementById('resultImg');
+        const predictionText = document.getElementById('predictionText');
+        const predictBtn = document.getElementById('predictBtn');
+        const loadingDiv = document.getElementById('loadingDiv');
+
+        // Handle image selection and preview
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewDiv.style.display = 'block';
+                    predictBtn.disabled = false;
+                    // Hide previous results
+                    resultDiv.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                previewDiv.style.display = 'none';
+                predictBtn.disabled = true;
+                resultDiv.style.display = 'none';
+            }
+        });
+
+        // Handle form submission
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+
+            const image = imageInput.files[0];
+            if (!image) return;
+
+            // Show loading
+            loadingDiv.style.display = 'block';
+            resultDiv.style.display = 'none';
+            predictBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('image', image);
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                // Hide loading
+                loadingDiv.style.display = 'none';
+                
+                if (result.prediction) {
+                    // Show the same image in results with debugging
+                    console.log('Setting result image source:', previewImg.src);
+                    console.log('Preview image element:', previewImg);
+                    console.log('Result image element:', resultImg);
+                    
+                    // Clear any previous source and set new one
+                    resultImg.src = '';
+                    setTimeout(() => {
+                        resultImg.src = previewImg.src;
+                        console.log('Result image src set to:', resultImg.src);
+                    }, 100);
+                    
+                    // Make sure the image is visible and loaded
+                    resultImg.style.display = 'block';
+                    resultImg.style.visibility = 'visible';
+                    resultImg.style.opacity = '1';
+                    
+                    resultImg.onload = function() {
+                        console.log('Result image loaded successfully');
+                        console.log('Image dimensions:', this.naturalWidth, 'x', this.naturalHeight);
+                    };
+                    resultImg.onerror = function() {
+                        console.error('Failed to load result image');
+                        console.error('Image src:', this.src);
+                    };
+                    
+                    let predictionHtml = result.prediction;
+                    if (result.confidence) {
+                        predictionHtml += `<br><small style="color: #7f8c8d;">Confidence: ${result.confidence}</small>`;
+                    }
+                    
+                    predictionText.innerHTML = predictionHtml;
+                    predictionText.className = 'prediction-success';
+                    resultDiv.style.display = 'block';
+                } else {
+                    predictionText.innerHTML = "Error: " + (result.error || "Unknown error occurred");
+                    predictionText.className = 'prediction-error';
+                    resultDiv.style.display = 'block';
+                }
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                predictionText.innerHTML = "Error: Failed to connect to server";
+                predictionText.className = 'prediction-error';
+                resultDiv.style.display = 'block';
+            }
+            
+            predictBtn.disabled = false;
+        };
+    </script>
+</body>
+</html>
