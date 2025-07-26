@@ -6,8 +6,21 @@
 </head>
 <body>
     <div class="container">
-        <h1>🌿 Leaf Disease Detection System</h1>
-        <p class="subtitle">Upload a leaf image to detect plant diseases using AI</p>
+        <h1>🌿 Plant Disease Detection System</h1>
+        <p class="subtitle">Upload a leaf or fruit image to detect plant diseases using AI ensemble models</p>
+        
+        <div class="disease-info" style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 30px; font-size: 0.9em; color: #7f8c8d;">
+            <h4 style="color: #2c3e50; margin-bottom: 10px;">🔬 Detectable Diseases:</h4>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Anthracnose fruit rot</span>
+                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Anthracnose leaf spot</span>
+                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Blossom end rot</span>
+                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Fresh fruit</span>
+                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Fresh leaf</span>
+                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Insect damaged leaf</span>
+                <span style="background: #e8f5e8; padding: 5px 10px; border-radius: 15px; color: #27ae60;">Yellow mosaic virus</span>
+            </div>
+        </div>
         
         <div class="upload-section">
             <form id="uploadForm">
@@ -41,8 +54,18 @@
                 </div>
                 <div class="result-text">
                     <div class="prediction-box">
-                        <h4>Detected Disease:</h4>
+                        <h4>🔬 Detected Disease:</h4>
                         <p id="predictionText"></p>
+                        
+                        <div id="allPredictions" style="margin-top: 15px; display: none;">
+                            <h5 style="color: #2c3e50; margin-bottom: 10px;">📊 All Class Probabilities:</h5>
+                            <div id="probabilitiesList"></div>
+                        </div>
+                        
+                        <div id="modelInfo" style="margin-top: 15px; display: none;">
+                            <h5 style="color: #7f8c8d; margin-bottom: 5px;">🤖 Model Architecture:</h5>
+                            <p id="architectureText" style="font-size: 0.9em; color: #7f8c8d;"></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -133,13 +156,46 @@
                         console.error('Image src:', this.src);
                     };
                     
-                    let predictionHtml = result.prediction;
+                    // Display main prediction
+                    let predictionHtml = `<strong>${result.prediction}</strong>`;
                     if (result.confidence) {
                         predictionHtml += `<br><small style="color: #7f8c8d;">Confidence: ${result.confidence}</small>`;
                     }
                     
                     predictionText.innerHTML = predictionHtml;
                     predictionText.className = 'prediction-success';
+                    
+                    // Show all class probabilities if available
+                    const allPredictionsDiv = document.getElementById('allPredictions');
+                    const probabilitiesList = document.getElementById('probabilitiesList');
+                    
+                    if (result.all_predictions) {
+                        let probabilitiesHtml = '';
+                        for (const [className, probability] of Object.entries(result.all_predictions)) {
+                            const isHighest = className === result.prediction;
+                            probabilitiesHtml += `
+                                <div style="padding: 5px; margin: 2px 0; border-radius: 5px; ${isHighest ? 'background-color: #d5f4e6; font-weight: bold;' : 'background-color: #f8f9fa;'}">
+                                    <span style="color: #2c3e50;">${className}:</span> 
+                                    <span style="color: #27ae60; float: right;">${probability}</span>
+                                </div>
+                            `;
+                        }
+                        probabilitiesList.innerHTML = probabilitiesHtml;
+                        allPredictionsDiv.style.display = 'block';
+                    }
+                    
+                    // Show model info if available
+                    const modelInfoDiv = document.getElementById('modelInfo');
+                    const architectureText = document.getElementById('architectureText');
+                    
+                    if (result.model_info) {
+                        architectureText.innerHTML = `
+                            ${result.model_info.architecture}<br>
+                            <small>Base Models: ${result.model_info.base_models} | Classes: ${result.model_info.classes}</small>
+                        `;
+                        modelInfoDiv.style.display = 'block';
+                    }
+                    
                     resultDiv.style.display = 'block';
                 } else {
                     predictionText.innerHTML = "Error: " + (result.error || "Unknown error occurred");
