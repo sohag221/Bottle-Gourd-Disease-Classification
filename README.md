@@ -1,4 +1,4 @@
-# 🌿 Plant Disease Detection System
+# 🌿 Bottle Gourd Disease Detection System
 
 A powerful AI-driven plant disease detection system using PyTorch ensemble models for accurate identification of plant diseases from leaf and fruit images.
 
