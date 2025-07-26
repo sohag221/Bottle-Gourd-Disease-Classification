@@ -27,7 +27,7 @@
                 <div class="file-input-wrapper">
                     <input type="file" id="imageInput" name="image" accept="image/*" required>
                     <label for="imageInput" class="file-input-label">
-                        📁 Choose Leaf Image
+                        📁 Choose Image
                     </label>
                 </div>
                 <button type="submit" id="predictBtn" class="predict-btn" disabled>
@@ -189,9 +189,25 @@
                     const architectureText = document.getElementById('architectureText');
                     
                     if (result.model_info) {
+                        // Format base models as individual badges
+                        let baseModelsHtml = '';
+                        if (result.model_info.base_models && Array.isArray(result.model_info.base_models)) {
+                            baseModelsHtml = result.model_info.base_models.map(model => 
+                                `<span style="background: #e3f2fd; color: #1976d2; padding: 3px 8px; border-radius: 12px; font-size: 0.8em; margin: 2px; display: inline-block;">${model}</span>`
+                            ).join('');
+                        } else {
+                            baseModelsHtml = `<span style="background: #e3f2fd; color: #1976d2; padding: 3px 8px; border-radius: 12px; font-size: 0.8em;">${result.model_info.base_models}</span>`;
+                        }
+                        
                         architectureText.innerHTML = `
-                            ${result.model_info.architecture}<br>
-                            <small>Base Models: ${result.model_info.base_models} | Classes: ${result.model_info.classes}</small>
+                            <strong>${result.model_info.architecture}</strong><br>
+                            <div style="margin-top: 8px;">
+                                <small style="color: #666;">Base Models (${result.model_info.total_models}):</small><br>
+                                <div style="margin-top: 5px;">${baseModelsHtml}</div>
+                            </div>
+                            <div style="margin-top: 8px;">
+                                <small style="color: #666;">Classes: ${result.model_info.classes} | Device: ${result.model_info.device}</small>
+                            </div>
                         `;
                         modelInfoDiv.style.display = 'block';
                     }

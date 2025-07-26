@@ -170,9 +170,6 @@ input[type="file"] {
     flex: 1;
     min-width: 250px;
     text-align: center;
-    padding: 10px;
-    background-color: #f0f8ff; /* Light blue background for debugging */
-    border: 2px dashed #3498db; /* Border for debugging */
 }
 
 .result-image img {
@@ -180,10 +177,6 @@ input[type="file"] {
     max-height: 250px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    display: block !important;
-    margin: 0 auto;
-    visibility: visible !important;
-    opacity: 1 !important;
 }
 
 .result-text {
