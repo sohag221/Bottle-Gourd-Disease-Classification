@@ -1,15 +1,45 @@
-# 🌿 Bottle Gourd Disease Detection System
+# 🌿 Plant Disease Detection System
 
-A powerful AI-driven plant disease detection system using PyTorch ensemble models for accurate identification of plant diseases from leaf and fruit images.
+An AI-powered web application that detects plant diseases from leaf images using an ensemble of 6 deep learning models. Share your app globally with friends anywhere in the world!
+
+![Plant Disease Detection](https://img.shields.io/badge/AI-Plant%20Disease%20Detection-green)
+![Python](https://img.shields.io/badge/Python-3.13.5-blue)
+![Flask](https://img.shields.io/badge/Flask-3.1.1-red)
+![PyTorch](https://img.shields.io/badge/PyTorch-2.7.1-orange)
 
 ## 🚀 Features
 
 - **6 PyTorch Model Ensemble**: ResNet50, EfficientNetB3, DenseNet121, InceptionV3, ConvNeXt, and Swin Tiny
 - **Real-time Prediction**: Upload images and get instant disease classification
 - **7 Disease Classes**: Comprehensive detection of common plant diseases
-- **Interactive Web Interface**: User-friendly Flask-based web application
+- **Interactive Web Interface**: User-friendly Flask-based web application with professional UI
 - **Confidence Scoring**: Detailed probability breakdown for all disease classes
 - **Individual Model Results**: See predictions from each model in the ensemble
+- **Global Sharing**: Share your app worldwide using ngrok tunneling service
+- **Mobile Friendly**: Responsive design works on any device (phone, computer, tablet)
+- **Secure Access**: HTTPS encryption for global connections
+
+## 🌐 Quick Global Sharing
+
+### Step 1: Start Your App
+```bash
+# Start Flask application
+D:/leaf_disease_app/.venv/Scripts/python.exe app.py
+```
+
+### Step 2: Create Global Tunnel
+```bash
+# Set up ngrok (one-time setup)
+ngrok authtoken YOUR_TOKEN_HERE
+
+# Create global tunnel
+ngrok http 5000
+```
+
+### Step 3: Share the URL
+- Copy the HTTPS URL (e.g., `https://abc123.ngrok-free.app`)
+- Share with friends anywhere in the world
+- They can access your app instantly on any device
 
 ## 📊 Supported Disease Classes
 
@@ -23,51 +53,74 @@ A powerful AI-driven plant disease detection system using PyTorch ensemble model
 
 ## 🛠️ Technology Stack
 
-- **Backend**: Flask (Python)
-- **Machine Learning**: PyTorch, timm
-- **Image Processing**: PIL, torchvision
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Model Storage**: Git LFS for large model files
+- **Backend**: Flask 3.1.1 (Python 3.13.5)
+- **Machine Learning**: PyTorch 2.7.1, timm
+- **Image Processing**: PIL 10.4.0, torchvision 0.22.1
+- **Frontend**: HTML5, CSS3, JavaScript (Professional UI)
+- **Global Sharing**: ngrok tunneling service
+- **Environment**: Virtual environment (.venv) configured
 
 ## 📋 Prerequisites
 
-- Python 3.8 or higher
-- Git LFS (for downloading model files)
-- Virtual environment (recommended)
+- Python 3.13.5 (configured)
+- Virtual environment (.venv) - already set up
+- ngrok (for global sharing)
+- All dependencies installed
 
-## 🔧 Installation
+## 🔧 Installation & Setup
 
-### 1. Clone the Repository
+### Ready to Use! 
+Your environment is already configured with:
+- ✅ Python 3.13.5 virtual environment
+- ✅ All required dependencies installed
+- ✅ PyTorch 2.7.1 with CPU support
+- ✅ Model files ready
 
+### For Global Sharing Setup
+
+1. **Install/Update ngrok:**
+   ```bash
+   # Download from https://ngrok.com/download
+   # Ensure version 3.7.0+ 
+   ngrok update
+   ```
+
+2. **Get ngrok Auth Token:**
+   ```bash
+   # Sign up at https://ngrok.com
+   # Get token from dashboard
+   ngrok authtoken YOUR_TOKEN_HERE
+   ```
+
+## 🚀 Usage
+
+### Local Usage
 ```bash
-git clone https://github.com/sohag221/leaf_disease_app.git
-cd leaf_disease_app
+# Start the application
+D:/leaf_disease_app/.venv/Scripts/python.exe app.py
+
+# Access at: http://localhost:5000
 ```
 
-### 2. Set Up Virtual Environment
-
+### Global Sharing (Recommended)
 ```bash
-# Create virtual environment
-python -m venv .venv
+# Terminal 1: Start Flask app
+D:/leaf_disease_app/.venv/Scripts/python.exe app.py
 
-# Activate virtual environment
-# On Windows:
-.venv\Scripts\activate
-# On macOS/Linux:
-source .venv/bin/activate
+# Terminal 2: Create global tunnel  
+ngrok http 5000
+
+# Share the HTTPS URL with friends worldwide!
 ```
 
-### 3. Install Dependencies
-
+### Alternative Sharing Methods
 ```bash
-# Install PyTorch (CPU version)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+# Method 1: Automated script
+python share_app.py
 
-# Install other requirements
-pip install flask pillow numpy scikit-learn timm
+# Method 2: Batch script (Windows)
+share_globally.bat
 ```
-
-### 4. Download Model Files
 
 The PyTorch model files are stored using Git LFS. Make sure you have Git LFS installed:
 
@@ -94,8 +147,13 @@ python app.py
 
 3. **Upload and Predict**:
    - Click "Choose Image" to upload a leaf or fruit image
-   - Click "Predict Disease" to get analysis results
-   - View ensemble prediction and individual model results
+### Web Interface Usage
+
+1. **Local Access**: Open `http://localhost:5000`
+2. **Global Access**: Use ngrok URL (e.g., `https://abc123.ngrok-free.app`)
+3. **Upload Image**: Click "Choose File" and select plant leaf image
+4. **Analyze**: Click "Analyze Image" to get disease detection results
+5. **View Results**: See ensemble prediction with confidence scores
 
 ### API Usage
 
@@ -104,8 +162,12 @@ You can also use the prediction API directly:
 ```python
 import requests
 
-# Upload image for prediction
+# For local usage
 url = "http://localhost:5000/predict"
+
+# For global usage (replace with your ngrok URL)
+url = "https://abc123.ngrok-free.app/predict"
+
 files = {"image": open("path/to/your/image.jpg", "rb")}
 response = requests.post(url, files=files)
 result = response.json()
@@ -119,15 +181,28 @@ print(f"Confidence: {result['confidence']}")
 ```
 leaf_disease_app/
 ├── app.py                          # Main Flask application
+├── utils.py                        # Utility functions
+├── share_app.py                    # Global sharing script
+├── setup_ngrok.py                  # ngrok setup helper
+├── share_globally.bat              # Windows batch script
 ├── templates/
-│   └── index.html                  # Web interface template
+│   └── index.html                  # Professional web interface
 ├── static/
-│   └── style.css                   # Styling for web interface
-├── *.pth                          # PyTorch model files (via Git LFS)
-├── label_encoder.pkl              # Label encoder for class mapping
-├── .gitattributes                 # Git LFS configuration
-└── README.md                      # This file
+│   └── style.css                   # Modern UI styling
+├── stacking_ensemble_model.pkl     # Trained ensemble model
+├── label_encoder.pkl               # Label encoder for class mapping
+├── .venv/                          # Python virtual environment
+├── README.md                       # Complete documentation
+├── SHARING_GUIDE.md               # Detailed sharing guide
+└── .gitattributes                  # Git LFS configuration
 ```
+
+## 🔗 Sharing Files Created
+
+- `share_app.py`: Automated Python script for global sharing
+- `setup_ngrok.py`: Interactive ngrok authentication setup
+- `share_globally.bat`: Windows batch script for easy sharing
+- `SHARING_GUIDE.md`: Comprehensive sharing documentation
 
 ## 🧠 Model Architecture
 
@@ -135,7 +210,7 @@ leaf_disease_app/
 The system uses an ensemble of 6 different CNN architectures:
 
 1. **ResNet50**: Deep residual network with skip connections
-2. **EfficientNetB3**: Efficient scaling of CNN architectures
+2. **EfficientNetB3**: Efficient scaling of CNN architectures  
 3. **DenseNet121**: Dense connectivity between layers
 4. **InceptionV3**: Multi-scale feature extraction
 5. **ConvNeXt**: Modern CNN architecture
@@ -174,12 +249,34 @@ ensemble_probs = np.mean(all_predictions, axis=0)
 final_prediction = np.argmax(ensemble_probs)
 ```
 
-## 📈 Performance
+## 📈 Performance & Global Sharing
 
-- **Ensemble Accuracy**: Improved accuracy through model averaging
+### Model Performance
+- **Ensemble Accuracy**: Improved accuracy through 6-model averaging
 - **Individual Model Insights**: View contribution of each architecture
 - **Confidence Scoring**: Reliable confidence estimates
-- **Real-time Processing**: Fast inference on CPU/GPU
+- **Real-time Processing**: Fast inference on CPU (optimized for deployment)
+
+### Global Sharing Performance
+- **Connection Speed**: Instant global access via ngrok tunneling
+- **Device Compatibility**: Works on any device (phone, computer, tablet)
+- **Network Reliability**: HTTPS secure connections worldwide
+- **Session Duration**: Free ngrok sessions last 2 hours
+
+## 🌍 Current Deployment Status
+
+### Active Global URL
+Your app is currently accessible worldwide at:
+```
+https://420ecffa161d.ngrok-free.app
+```
+
+### Sharing Capabilities
+- ✅ **Global Access**: Available from any country
+- ✅ **Mobile Friendly**: Responsive design for all devices
+- ✅ **Secure Connection**: HTTPS encryption
+- ✅ **Real-time Processing**: Instant disease detection
+- ✅ **No Installation**: Friends just need the URL
 
 ## 🔬 Model Details
 
@@ -212,26 +309,45 @@ final_prediction = np.argmax(ensemble_probs)
 }
 ```
 
-## 🛡️ Error Handling
+## 🛡️ Error Handling & Security
 
-The application includes comprehensive error handling:
-
+### Application Security
 - **File Validation**: Ensures valid image files are uploaded
 - **Model Loading**: Graceful handling of missing model files
 - **Prediction Errors**: Detailed error messages for debugging
 - **Network Issues**: Timeout and connection error handling
 
-## 🚀 Deployment
+### Global Sharing Security
+- **HTTPS Encryption**: All global connections are secure
+- **Private IP Protection**: Your computer's IP remains hidden
+- **Temporary Access**: ngrok URLs expire when you stop sharing
+- **No Data Storage**: Images are processed in real-time only
 
-### Local Development
+## 🚀 Deployment Options
+
+### 1. Local Development (Current)
 ```bash
-python app.py
+D:/leaf_disease_app/.venv/Scripts/python.exe app.py
+# Access: http://localhost:5000
 ```
 
-### Production Deployment
+### 2. Global Sharing (Active)
+```bash
+# Terminal 1: Flask app
+D:/leaf_disease_app/.venv/Scripts/python.exe app.py
 
-For production deployment, consider using:
+# Terminal 2: ngrok tunnel
+ngrok http 5000
+# Access: https://420ecffa161d.ngrok-free.app
+```
 
+### 3. Automated Sharing
+```bash
+python share_app.py
+# Automatically handles Flask + ngrok setup
+```
+
+### 4. Production Deployment (Future)
 - **Gunicorn**: `gunicorn -w 4 -b 0.0.0.0:5000 app:app`
 - **Docker**: Containerize the application
 - **Cloud Services**: Deploy on AWS, GCP, or Azure
@@ -245,9 +361,19 @@ For production deployment, consider using:
 4. Push to the branch: `git push origin feature-name`
 5. Submit a pull request
 
+## 📄 Documentation Files
+
+- `README.md`: Complete project documentation (this file)
+- `SHARING_GUIDE.md`: Detailed global sharing guide
+- Project includes all necessary sharing scripts and setup files
+
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is developed for educational and research purposes in plant disease detection using deep learning.
+
+---
+
+**🌟 Share your AI-powered plant disease detection system with the world! 🌍**
 
 ## 🙏 Acknowledgments
 
