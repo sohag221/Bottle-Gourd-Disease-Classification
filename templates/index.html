@@ -575,6 +575,149 @@
         document.addEventListener('DOMContentLoaded', () => {
             initTabs();
         });
+
+        // CAM Analysis Functions
+        async function generateCAMVisualization(allMethods = false) {
+            const image = imageInput.files[0];
+            if (!image) {
+                showCamError('Please select an image first');
+                return;
+            }
+
+            // Show loading
+            camLoading.style.display = 'block';
+            camResults.style.display = 'none';
+            camError.style.display = 'none';
+            generateCamBtn.disabled = true;
+            generateAllCamBtn.disabled = true;
+
+            const formData = new FormData();
+            formData.append('image', image);
+            
+            if (allMethods) {
+                formData.append('all_methods', 'true');
+            } else {
+                formData.append('cam_method', camMethodSelect.value);
+            }
+
+            try {
+                const response = await fetch('/cam_analysis', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                // Hide loading
+                camLoading.style.display = 'none';
+                
+                if (result.success) {
+                    displayCamResults(result, allMethods);
+                } else {
+                    showCamError(result.error || 'CAM analysis failed');
+                }
+            } catch (error) {
+                camLoading.style.display = 'none';
+                showCamError('Failed to connect to server: ' + error.message);
+            }
+            
+            generateCamBtn.disabled = false;
+            generateAllCamBtn.disabled = false;
+        }
+
+        function displayCamResults(result, allMethods) {
+            camResultsGrid.innerHTML = '';
+            camComparisonGrid.style.display = 'none';
+            
+            if (allMethods && result.visualizations) {
+                // Display all methods
+                const methods = ['gradcam', 'gradcam++', 'eigencam', 'scorecam'];
+                
+                methods.forEach(method => {
+                    if (result.visualizations[method] && result.visualizations[method].success) {
+                        const card = createCamResultCard(
+                            method.toUpperCase(), 
+                            result.visualizations[method].cam_overlay,
+                            result.visualizations[method].heatmap,
+                            result.visualizations[method].confidence_score
+                        );
+                        camResultsGrid.appendChild(card);
+                    } else {
+                        const errorCard = createCamErrorCard(method.toUpperCase(), 
+                            result.visualizations[method]?.error || 'Generation failed');
+                        camResultsGrid.appendChild(errorCard);
+                    }
+                });
+                
+                // Show comparison grid if available
+                if (result.comparison_grid) {
+                    camComparisonImage.src = result.comparison_grid;
+                    camComparisonGrid.style.display = 'block';
+                }
+            } else if (result.visualization) {
+                // Display single method
+                const method = result.metadata.cam_method || camMethodSelect.value;
+                const card = createCamResultCard(
+                    method.toUpperCase(),
+                    result.visualization.cam_overlay,
+                    result.visualization.heatmap,
+                    result.visualization.confidence_score
+                );
+                camResultsGrid.appendChild(card);
+            }
+            
+            camResults.style.display = 'block';
+        }
+
+        function createCamResultCard(methodName, camOverlay, heatmap, confidenceScore) {
+            const card = document.createElement('div');
+            card.className = 'cam-result-card';
+            
+            card.innerHTML = `
+                <h4>${methodName}</h4>
+                <div class="cam-image-container">
+                    <img src="${camOverlay}" alt="${methodName} CAM Overlay" />
+                    <div class="cam-confidence">Score: ${(confidenceScore * 100).toFixed(1)}%</div>
+                </div>
+                <div style="margin-top: var(--space-3);">
+                    <h5 style="margin-bottom: var(--space-2); color: var(--gray-700);">Heatmap</h5>
+                    <div class="cam-image-container">
+                        <img src="${heatmap}" alt="${methodName} Heatmap" />
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function createCamErrorCard(methodName, errorMessage) {
+            const card = document.createElement('div');
+            card.className = 'cam-result-card';
+            card.style.borderColor = 'var(--error)';
+            
+            card.innerHTML = `
+                <h4 style="color: var(--error);">${methodName}</h4>
+                <div style="padding: var(--space-4); text-align: center; color: var(--error);">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 24px; margin-bottom: var(--space-2);"></i>
+                    <p>Error: ${errorMessage}</p>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function showCamError(message) {
+            camError.innerHTML = `
+                <strong><i class="fas fa-exclamation-triangle"></i> CAM Analysis Error:</strong>
+                <br>${message}
+            `;
+            camError.style.display = 'block';
+            camResults.style.display = 'none';
+        }
+
+        // CAM Event Listeners
+        generateCamBtn.addEventListener('click', () => generateCAMVisualization(false));
+        generateAllCamBtn.addEventListener('click', () => generateCAMVisualization(true));
     </script>
 </body>
 </html>
