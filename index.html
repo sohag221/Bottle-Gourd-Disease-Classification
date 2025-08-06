@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Plant Disease Detection | Bottle Gourd Health Monitor</title>
+    <link rel="stylesheet" href="static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header Section -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>PlantCare AI</h1>
+                        <p>Advanced Bottle Gourd Disease Detection</p>
+                    </div>
+                </div>
+                <div class="header-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">AI Models</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">7</span>
+                        <span class="stat-label">Disease Types</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">99%</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Container -->
+        <div class="main-container">
+            <!-- Disease Info Cards -->
+            <div class="disease-info-grid">
+                <h3><i class="fas fa-microscope"></i> Detectable Conditions</h3>
+                <div class="disease-cards">
+                    <div class="disease-card disease">
+                        <i class="fas fa-virus"></i>
+                        <span>Anthracnose fruit rot</span>
+                    </div>
+                    <div class="disease-card disease">
+                        <i class="fas fa-bug"></i>
+                        <span>Anthracnose leaf spot</span>
+                    </div>
+                    <div class="disease-card disease">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span>Blossom end rot</span>
+                    </div>
+                    <div class="disease-card healthy">
+                        <i class="fas fa-apple-alt"></i>
+                        <span>Fresh fruit</span>
+                    </div>
+                    <div class="disease-card healthy">
+                        <i class="fas fa-leaf"></i>
+                        <span>Fresh leaf</span>
+                    </div>
+                    <div class="disease-card disease">
+                        <i class="fas fa-cut"></i>
+                        <span>Insect damaged leaf</span>
+                    </div>
+                    <div class="disease-card disease">
+                        <i class="fas fa-biohazard"></i>
+                        <span>Yellow mosaic virus</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Section -->
+            <div class="upload-section">
+                <div class="upload-container">
+                    <form id="uploadForm" class="upload-form">
+                        <div class="upload-area" id="uploadArea">
+                            <input type="file" id="imageInput" name="image" accept="image/*" required>
+                            <div class="upload-content">
+                                <div class="upload-icon">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                </div>
+                                <h4>Upload Plant Image</h4>
+                                <p>Drag and drop your image here or click to browse</p>
+                                <div class="upload-formats">
+                                    <span>Supports: JPG, PNG, WebP</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" id="predictBtn" class="predict-btn" disabled>
+                            <i class="fas fa-search"></i>
+                            <span>Analyze Image</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Image Preview -->
+            <div id="imagePreview" class="image-preview-section" style="display: none;">
+                <div class="preview-container">
+                    <h3><i class="fas fa-image"></i> Selected Image</h3>
+                    <div class="preview-wrapper">
+                        <img id="previewImg" alt="Preview" />
+                        <div class="preview-overlay">
+                            <button class="change-image-btn" onclick="document.getElementById('imageInput').click()">
+                                <i class="fas fa-edit"></i> Change Image
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Animation -->
+            <div id="loadingDiv" class="loading-section" style="display: none;">
+                <div class="loading-container">
+                    <div class="loading-animation">
+                        <div class="loading-spinner"></div>
+                        <div class="loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                    <h3>Analyzing Your Plant</h3>
+                    <p>Our AI models are examining the image...</p>
+                    <div class="analysis-steps">
+                        <div class="step active" id="step1">
+                            <i class="fas fa-upload"></i>
+                            <span>Image Processing</span>
+                        </div>
+                        <div class="step" id="step2">
+                            <i class="fas fa-brain"></i>
+                            <span>AI Analysis</span>
+                        </div>
+                        <div class="step" id="step3">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Results Generation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div id="result" class="results-section" style="display: none;">
+                <div class="results-container">
+                    <h2><i class="fas fa-flask"></i> Analysis Results</h2>
+                    
+                    <div class="results-grid">
+                        <!-- Image Result -->
+                        <div class="result-image-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-image"></i> Analyzed Image</h3>
+                            </div>
+                            <div class="image-container">
+                                <img id="resultImg" alt="Analyzed Image" />
+                            </div>
+                        </div>
+
+                        <!-- Main Prediction -->
+                        <div class="prediction-card">
+                            <div class="card-header">
+                                <h3><i class="fas fa-diagnoses"></i> Primary Diagnosis</h3>
+                            </div>
+                            <div class="prediction-content">
+                                <div id="predictionText" class="prediction-result"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detailed Analysis -->
+                    <div class="analysis-tabs">
+                        <div class="tab-buttons">
+                            <button class="tab-btn active" data-tab="probabilities">
+                                <i class="fas fa-chart-bar"></i> Probabilities
+                            </button>
+                            <button class="tab-btn" data-tab="models">
+                                <i class="fas fa-cogs"></i> Model Info
+                            </button>
+                            <button class="tab-btn" data-tab="treatment">
+                                <i class="fas fa-prescription-bottle-alt"></i> Treatment
+                            </button>
+                        </div>
+
+                        <div class="tab-content">
+                            <!-- Probabilities Tab -->
+                            <div id="probabilities-tab" class="tab-pane active">
+                                <div id="allPredictions" style="display: none;">
+                                    <h4>All Class Probabilities</h4>
+                                    <div id="probabilitiesList" class="probabilities-list"></div>
+                                </div>
+                            </div>
+
+                            <!-- Model Info Tab -->
+                            <div id="models-tab" class="tab-pane">
+                                <div id="modelInfo" style="display: none;">
+                                    <h4>AI Model Architecture</h4>
+                                    <div id="architectureText" class="architecture-info"></div>
+                                </div>
+                            </div>
+
+                            <!-- Treatment Tab -->
+                            <div id="treatment-tab" class="tab-pane">
+                                <div id="diseaseInfo" style="display: none;">
+                                    <h4>Disease Information & Treatment</h4>
+                                    <div id="diseaseDetails" class="disease-details"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>PlantCare AI</h4>
+                    <p>Advanced agricultural technology for disease detection and plant health monitoring.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Technology</h4>
+                    <ul>
+                        <li>Deep Learning Ensemble</li>
+                        <li>Computer Vision</li>
+                        <li>PyTorch Framework</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Accuracy</h4>
+                    <p>6 CNN models working together for maximum precision in plant disease detection.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="static/js/script.js"></script>
+</body>
+</html>
