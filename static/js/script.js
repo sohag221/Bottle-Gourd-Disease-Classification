@@ -284,27 +284,115 @@ document.addEventListener('DOMContentLoaded', function() {
     window.demoMode = true;
     if (window.demoMode) {
         submitPrediction = function() {
-            // Create demo data
+            // All possible diseases
+            const allDiseases = [
+                "Anthracnose fruit rot",
+                "Anthracnose leaf spot",
+                "Blossom end rot",
+                "Fresh fruit",
+                "Fresh leaf",
+                "Insect damaged leaf",
+                "Yellow mosaic virus"
+            ];
+            
+            // Get image data to make "prediction" based on image characteristics
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 100;
+            context.drawImage(previewImg, 0, 0, 100, 100);
+            
+            // Get image data and calculate some basic characteristics
+            let imageData;
+            try {
+                imageData = context.getImageData(0, 0, 100, 100).data;
+            } catch(e) {
+                // CORS issue, fallback to random
+                console.log("Could not access image data, using random prediction");
+                imageData = null;
+            }
+            
+            // Use image characteristics to pick a disease, or random if we can't access the image data
+            let diseaseIndex = 0;
+            if (imageData) {
+                // Use image characteristics to determine "prediction"
+                let redSum = 0, greenSum = 0, yellowSum = 0;
+                
+                // Sample a few pixels
+                for (let i = 0; i < imageData.length; i += 40) {
+                    const r = imageData[i];
+                    const g = imageData[i + 1];
+                    const b = imageData[i + 2];
+                    
+                    redSum += r;
+                    greenSum += g;
+                    
+                    // Detect yellow (high red and green, low blue)
+                    if (r > 150 && g > 150 && b < 100) {
+                        yellowSum += 1;
+                    }
+                }
+                
+                // Logic to determine disease based on image characteristics
+                if (yellowSum > 20) {
+                    // Lots of yellow, likely Yellow mosaic virus
+                    diseaseIndex = 6; // Yellow mosaic virus
+                } else if (redSum > greenSum * 1.5) {
+                    // Reddish image, likely Anthracnose fruit rot
+                    diseaseIndex = 0; // Anthracnose fruit rot
+                } else if (greenSum > redSum * 1.5) {
+                    // Very green image, likely Fresh leaf
+                    diseaseIndex = 4; // Fresh leaf
+                } else {
+                    // Use timestamp to create some variability
+                    diseaseIndex = Math.floor(Date.now() % allDiseases.length);
+                }
+            } else {
+                // Random if we couldn't access image data
+                diseaseIndex = Math.floor(Math.random() * allDiseases.length);
+            }
+            
+            // Create confidence value (60-95%)
+            const mainConfidence = (60 + Math.floor(Math.random() * 36)).toFixed(2);
+            
+            // Create random mock results with appropriate confidence values
+            const prediction = allDiseases[diseaseIndex];
+            const mockAllPredictions = {};
+            
+            // Distribute the remaining confidence (100 - mainConfidence)
+            const remainingConfidence = 100 - parseFloat(mainConfidence);
+            let runningTotal = 0;
+            
+            // Create mock confidence values for other diseases
+            allDiseases.forEach((disease, i) => {
+                if (i === diseaseIndex) {
+                    // This is our main prediction
+                    mockAllPredictions[disease] = mainConfidence + "%";
+                } else {
+                    // Random confidence for others, but proportionally lower
+                    const randomConfidence = (remainingConfidence * Math.random()).toFixed(2);
+                    runningTotal += parseFloat(randomConfidence);
+                    mockAllPredictions[disease] = randomConfidence + "%";
+                }
+            });
+            
+            // Create final mock results object
             const mockResults = {
-                prediction: "Yellow mosaic virus",
-                confidence: "93.45%",
-                all_predictions: {
-                    "Yellow mosaic virus": "93.45%",
-                    "Anthracnose leaf spot": "4.32%",
-                    "Insect damaged leaf": "1.05%",
-                    "Anthracnose fruit rot": "0.58%",
-                    "Blossom end rot": "0.34%",
-                    "Fresh leaf": "0.21%",
-                    "Fresh fruit": "0.05%"
-                },
+                prediction: prediction,
+                confidence: mainConfidence + "%",
+                all_predictions: mockAllPredictions,
                 model_info: {
-                    architecture: "PyTorch Ensemble",
+                    architecture: "PyTorch Ensemble (Demo Mode)",
                     base_models: ["ResNet50", "EfficientNetB3", "DenseNet121", "InceptionV3", "ConvNeXt", "Swin Tiny"],
                     total_models: 6,
-                    device: "CPU",
+                    device: "Static Deployment (Demo Mode)",
                     classes: 7
                 }
             };
+            
+            setTimeout(() => {
+                displayResults(mockResults);
+            }, 500);
             
             setTimeout(() => {
                 displayResults(mockResults);

@@ -32,4 +32,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Setup demo mode by default
     window.demoMode = true;
+    
+    // Add demo mode banner
+    const demoBanner = document.createElement('div');
+    demoBanner.style.padding = '6px 10px';
+    demoBanner.style.backgroundColor = '#007bff';
+    demoBanner.style.color = 'white';
+    demoBanner.style.position = 'fixed';
+    demoBanner.style.bottom = '0';
+    demoBanner.style.left = '0';
+    demoBanner.style.right = '0';
+    demoBanner.style.zIndex = '9999';
+    demoBanner.style.textAlign = 'center';
+    demoBanner.style.fontSize = '14px';
+    demoBanner.innerHTML = '⚠️ Demo Mode: Predictions are simulated based on image analysis. For actual AI predictions, run the app locally with Python backend.';
+    
+    // Add the banner after page load
+    setTimeout(() => {
+        document.body.appendChild(demoBanner);
+    }, 1000);
 });

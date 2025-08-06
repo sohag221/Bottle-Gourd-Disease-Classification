@@ -5,17 +5,30 @@ This branch is specifically configured for GitHub Pages deployment of the Bottle
 ## What Works in this Version
 
 - Full web interface with all UI elements
-- Demo mode that simulates disease detection without requiring backend services
+- Smart demo mode that analyzes image characteristics to provide varied predictions
 - All visual features and styling
 
-## Note
+## How the Demo Mode Works
 
-This is a static demonstration version. For the full application with actual AI model inference:
+When hosted on GitHub Pages or other static hosting platforms (like Vercel):
+
+1. The app analyzes your uploaded image's color characteristics
+2. It uses these characteristics to make a simulated "prediction"
+3. For example:
+   - Images with more yellow content may be classified as "Yellow mosaic virus"
+   - Images with more red content may be classified as "Anthracnose fruit rot"
+   - Very green images may be classified as "Fresh leaf"
+
+**Important**: These are simulated predictions based on basic image analysis, NOT real AI model inference.
+
+## For Actual AI-Powered Predictions
+
+For the full application with actual AI model inference:
 
 1. Clone the main repository
 2. Follow the setup instructions in the main README
 3. Run the Flask application locally
 
-## Demo Mode
+## Demo Mode Banner
 
-The application automatically runs in demo mode when hosted on GitHub Pages, providing simulated prediction results.
+A blue notification banner will appear at the bottom of the screen to clearly indicate when the app is running in demo mode.
