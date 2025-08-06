@@ -1,0 +1,2 @@
+/* This file is a duplicate of static/style.css to ensure CSS works in all deployment scenarios */
+@import url('static/style.css');
